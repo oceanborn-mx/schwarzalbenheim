@@ -1,0 +1,81 @@
+This is a project that aim to perform the FFT by using a different approach
+about the bit reversal algorithm.
+
+The following is a numerical example of the bit reversal algorithm proposed
+in this project.
+
+b3 b2 b1 b0 --> b0 b3 b2 b1 --> b0 b1 b3 b2 --> b0 b1 b2 b3
+
+[0]
+
+	1.
+
+	 b3 b2 b1 b0	 b3 b2 b1 b0	 b3 b2 b1 b0
+	& 0  0  0  1	& 1  1  1  1	& 0  0  0  0
+	------------	------------	------------
+	  0  0  0 b0	 b3 b2 b1 b0	  0  0  0  0
+
+	2.
+
+	0 0 0 b0 << 3	b3 b2 b1 b0 >> 1
+	-------------	----------------
+	b0 0 0 0	 0 b3 b2 b1
+
+	3.
+
+	 b0  0  0  0
+	| 0 b3 b2 b1
+	| 0  0  0  0
+	------------
+	 b0 b3 b2 b1
+
+[1]
+
+	1.
+
+	 b0 b3 b2 b1	 b0 b3 b2 b1	 b0 b3 b2 b1
+	& 0  0  0  1	& 0  1  1  1	& 1  0  0  0
+	------------	------------	------------
+	  0  0  0 b1	  0 b3 b2 b1	 b0  0  0  0
+
+	2.
+
+	0 0 0 b1 << 2	 0 b3 b2 b1 >> 1
+	-------------	----------------
+	0 b1 0 0 	 0  0 b3 b2
+
+	3.
+
+	   0 b1  0  0
+	|  0  0 b3 b2
+	| b0  0  0  0
+	-------------
+	  b0 b1 b3 b2
+
+[2]
+
+	1.
+
+	 b0 b1 b3 b2	 b0 b1 b3 b2	 b0 b1 b3 b2
+	& 0  0  0  1	& 0  0  1  1	& 1  1  0  0
+	------------	------------	------------
+	  0  0  0 b2	  0  0 b3 b2	 b0 b1  0  0
+
+	2.
+
+	0 0 0 b2 << 1	 0 0 b3 b2 >> 1
+	-------------	----------------
+	0 0 b2 0 	 0 0  0 b3
+
+	3.
+
+	   0  0 b2  0
+	|  0  0  0 b3
+	| b0 b1  0  0
+	-------------
+	  b0 b1 b2 b3
+
+
+I am just giving you a brick, you are in charge to build the entire castle.
+
+
