@@ -20,7 +20,6 @@
 // TODO: * clean-up the code.
 //       * make generic abount the number of FFT points, always in power of 2
 //       * remove the hard-coded values.
-//       * try to optimize the ** SWAP ** function.
 //       * use c++ 14 initializers, constructors, etc.
 //       * your contribution is welcome
 
@@ -68,6 +67,18 @@ typedef struct COMPLEX_NUMBER
         };
     };
 } COMPLEX_NUMBER;
+
+// function to swap numbers
+inline int swap(double *a, double *b)
+{
+    double temp;    // temporary
+
+    temp = *a;
+    *a = *b;
+    *b = temp;
+
+    return 0;
+}   // end swap
 
 void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 {
@@ -120,7 +131,6 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             theta = (isign * TWOPI * _w.bits) / NN;     // angle
             wr = cos(theta);    // real
             wi = sin(theta);    // imaginary
-
                                     
             // bit reversal algorithm
             u.bits = j;
@@ -157,7 +167,6 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             r.bits = x.bits | y.bits | c.bits;
             s.bits = xx.bits | yy.bits | cc.bits;
 
-
             array[j].bits = r.bits;
             array[j+1].bits = s.bits;
 
@@ -180,7 +189,6 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
    
             _u.bits = _xu.bits | _yu.bits | _cu.bits;
             _v.bits = _xv.bits | _yv.bits | _cv.bits;
-
 
             // butterfly
             temprA = data[_u.bits].re + data[_v.bits].re;   // A = a + b
@@ -229,40 +237,24 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     }   // end for
 
     // swap
-    for (int jj = 1; jj < (NN / 4); ++jj)
+    int q = 0;  // counter variable for the below loops
+
+    for (q = 1; q < (NN / 4); ++q)
     {
-        temp1 = data[array[jj].bits].re;
-        temp2 = data[array[jj].bits].im;
-
-        data[array[jj].bits].re = data[jj].re;
-        data[array[jj].bits].im = data[jj].im;
-
-        data[jj].re = temp1;
-        data[jj].im = temp2;
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
     }
 
-    for (int tt = NN / 4 + 1; tt < (NN / 2); ++tt)
+    for (q = NN / 4 + 1; q < (NN / 2); ++q)
     {
-        temp1 = data[array[tt].bits].re;
-        temp2 = data[array[tt].bits].im;
-
-        data[array[tt].bits].re = data[tt].re;
-        data[array[tt].bits].im = data[tt].im;
-
-        data[tt].re = temp1;
-        data[tt].im = temp2;
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
     }
 
-    for (int kk = NN / 2 + NN / 4 - 1; kk < (NN * 3 / 4); ++kk)
+    for (q = NN / 2 + NN / 4 - 1; q < (NN * 3 / 4); ++q)
     {
-        temp1 = data[array[kk].bits].re;
-        temp2 = data[array[kk].bits].im;
-
-        data[array[kk].bits].re = data[kk].re;
-        data[array[kk].bits].im = data[kk].im;
-
-        data[kk].re = temp1;
-        data[kk].im = temp2;
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
     }
 
 #ifdef _DEBUG_ 
