@@ -65,7 +65,6 @@ typedef struct COMPLEX_NUMBER
     };
 } COMPLEX_NUMBER;
 
-
 // function to return the mask accordind to the number of bits
 void masks(int nbits)
 {
@@ -102,5 +101,3 @@ void masks(int nbits)
             MASK2 = 0xFFFF;
     }   // end switch
 }
-
-

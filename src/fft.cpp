@@ -29,48 +29,7 @@
 #include <iomanip>
 #include "fft.h"
 
-// moved to fft.h
-//#define PI      M_PI        // pi to machine precision, defined in math.h
-//#define TWOPI   (2.0 * PI)
-//#define NBITS   4           // WA: hard-coded value to number of bits
-//#define _DEBUG_
-
 using namespace std;
-
-// moved to fft.h
-//const unsigned int NN       = 16;           // Number of points of the FFT
-//const unsigned int NBITS    = log2(NN);     // Number of bits to fit the number of FFT points
-//const unsigned int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
-
-// moved to fft.h
-// struct to hold the number of bits needed 
-// to fit the number of FFT points
-//typedef struct BITS 
-//{
-//    unsigned int bits : NBITS;  // hard-coded value needed, otherwise, copiling error
-//} BITS;
-//
-//// struct to hold the number of bits needed 
-//// to fit the twiddle factor
-//typedef struct BITS_TWIDDLE
-//{
-//    unsigned int bits : 3;
-//} BITS_TWIDDLE;
-//
-//// struct to define the layout of a complex number
-//typedef struct COMPLEX_NUMBER
-//{
-//    union
-//    {
-//        long double complexN;   // complex number
-//
-//        struct
-//        {
-//            double re;          // real
-//            double im;          // imaginary
-//        };
-//    };
-//} COMPLEX_NUMBER;
 
 // function to swap numbers
 inline int swap(double *a, double *b)
