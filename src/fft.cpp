@@ -27,46 +27,50 @@
 #include <math.h>
 #include <iostream>
 #include <iomanip>
+#include "fft.h"
 
-#define PI      M_PI        // pi to machine precision, defined in math.h
-#define TWOPI   (2.0 * PI)
-#define NBITS   4           // WA: hard-coded value to number of bits
-#define _DEBUG_
+// moved to fft.h
+//#define PI      M_PI        // pi to machine precision, defined in math.h
+//#define TWOPI   (2.0 * PI)
+//#define NBITS   4           // WA: hard-coded value to number of bits
+//#define _DEBUG_
 
 using namespace std;
 
-const unsigned int NN       = 16;           // Number of points of the FFT
+// moved to fft.h
+//const unsigned int NN       = 16;           // Number of points of the FFT
 //const unsigned int NBITS    = log2(NN);     // Number of bits to fit the number of FFT points
-const unsigned int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
+//const unsigned int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
 
+// moved to fft.h
 // struct to hold the number of bits needed 
 // to fit the number of FFT points
-typedef struct BITS 
-{
-    unsigned int bits : NBITS;  // hard-coded value needed, otherwise, copiling error
-} BITS;
-
-// struct to hold the number of bits needed 
-// to fit the twiddle factor
-typedef struct BITS_TWIDDLE
-{
-    unsigned int bits : 3;
-} BITS_TWIDDLE;
-
-// struct to define the layout of a complex number
-typedef struct COMPLEX_NUMBER
-{
-    union
-    {
-        long double complexN;   // complex number
-
-        struct
-        {
-            double re;          // real
-            double im;          // imaginary
-        };
-    };
-} COMPLEX_NUMBER;
+//typedef struct BITS 
+//{
+//    unsigned int bits : NBITS;  // hard-coded value needed, otherwise, copiling error
+//} BITS;
+//
+//// struct to hold the number of bits needed 
+//// to fit the twiddle factor
+//typedef struct BITS_TWIDDLE
+//{
+//    unsigned int bits : 3;
+//} BITS_TWIDDLE;
+//
+//// struct to define the layout of a complex number
+//typedef struct COMPLEX_NUMBER
+//{
+//    union
+//    {
+//        long double complexN;   // complex number
+//
+//        struct
+//        {
+//            double re;          // real
+//            double im;          // imaginary
+//        };
+//    };
+//} COMPLEX_NUMBER;
 
 // function to swap numbers
 inline int swap(double *a, double *b)
@@ -90,6 +94,9 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 
     BITS a, b, c, x, y, r;
     BITS aa, bb, cc, xx, yy, s;
+
+    // masks
+    masks(NBITS);
 
     // bits for twiddle factor counter
     BITS_TWIDDLE _w;
@@ -136,7 +143,7 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             u.bits = j;
             v.bits = j + 1;
 
-            // auxiliar counter for **swap** function
+            // auxiliar counter for swapping
             // initialize
             if (0 == i)
             {
@@ -152,15 +159,15 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             array[j].bits = array[j].bits;
             array[j + 1].bits = array[j + 1].bits;
 
-            a.bits = array[j].bits & 0x1;
-            b.bits = array[j].bits & (0xF >> i);
-            c.bits = array[j].bits & ((~0xF) >> i);
+            a.bits = array[j].bits & MASK1;
+            b.bits = array[j].bits & (MASK2 >> i);
+            c.bits = array[j].bits & ((~MASK2) >> i);
             x.bits = a.bits << (NSTAGES - 1 - i);
             y.bits = b.bits >> 1;
 
-            aa.bits = array[j+1].bits & 0x1;
-            bb.bits = array[j+1].bits & (0xF >> i);
-            cc.bits = array[j+1].bits & ((~0xF) >> i);
+            aa.bits = array[j+1].bits & MASK1;
+            bb.bits = array[j+1].bits & (MASK2 >> i);
+            cc.bits = array[j+1].bits & ((~MASK2) >> i);
             xx.bits = aa.bits << (NSTAGES - 1 - i);
             yy.bits = bb.bits >> 1;
 
@@ -175,15 +182,15 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             // it actually doing what the butterfly architecture
             // is intended to be, this initial bug is in fact a feature,
             // is a kind of penicillin :)
-            _au.bits = u.bits & 0x1;
-            _bu.bits = u.bits & (0xF >> i);
-            _cu.bits = u.bits & ((~0xF) >> i);
+            _au.bits = u.bits & MASK1;
+            _bu.bits = u.bits & (MASK2 >> i);
+            _cu.bits = u.bits & ((~MASK2) >> i);
             _xu.bits = _au.bits << (NSTAGES - 1 - i);
             _yu.bits = _bu.bits >> 1;
 
-            _av.bits = v.bits & 0x1;
-            _bv.bits = v.bits & (0xF >> i);
-            _cv.bits = v.bits & ((~0xF) >> i);
+            _av.bits = v.bits & MASK1;
+            _bv.bits = v.bits & (MASK2 >> i);
+            _cv.bits = v.bits & ((~MASK2) >> i);
             _xv.bits = _av.bits << (NSTAGES - 1 - i);
             _yv.bits = _bv.bits >> 1;
    
@@ -236,7 +243,7 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
         }   // end for
     }   // end for
 
-    // swap
+    // swapping
     int q = 0;  // counter variable for the below loops
 
     for (q = 1; q < (NN / 4); ++q)
@@ -274,7 +281,9 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 // function main
 int main()
 {
-    COMPLEX_NUMBER arreglo[16];
+    //masks(4);
+
+    COMPLEX_NUMBER arreglo[NN];
 
     arreglo[0].re = 0.0;
     arreglo[0].im = 0.0;
@@ -310,7 +319,7 @@ int main()
     arreglo[15].im = 0.0;
 
     // calculate FFT
-	fourier(arreglo, 16, 1);
+	fourier(arreglo, NN, 1);
 
     arreglo[0].re = 45.0;
     arreglo[0].im = 0.0;
@@ -346,7 +355,7 @@ int main()
     arreglo[15].im = -16.6652;
 
     // calculate IFFT
-	fourier(arreglo, 16, -1);
+	fourier(arreglo, NN, -1);
     // need to normalize    
 
     return 0;
