@@ -29,18 +29,6 @@
 
 using namespace std;
 
-// function to swap numbers
-inline int swap(double *a, double *b)
-{
-    double temp;    // temporary
-
-    temp = *a;
-    *a = *b;
-    *b = temp;
-
-    return 0;
-}   // end swap
-
 void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 {
     // variables to perform the bit reversal algorithm
@@ -54,13 +42,8 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     BITS _ar, _br, _cr, _xr, _yr, _r;
     BITS _as, _bs, _cs, _xs, _ys, _s;
 
-    // masks
-    masks(NBITS);
-
     // bits for twiddle factor counter
     BITS_TWIDDLE _w;
-
-    //int array[16];
 
     // butterfly
     double theta, wr, wi;
@@ -77,6 +60,9 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 #ifdef _DEBUG_
     cout << "NSTAGES: " << NSTAGES << endl;
 #endif
+
+    // masks
+    masks(NBITS);
 
     for (int i = 0; i < NSTAGES; ++i)
     {
@@ -103,7 +89,7 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
             v.bits = j + 1;
 
             // bit reversal algorithm to swap values 
-            // when butterfly operation are done
+            // when butterfly operations are done
             if (0 == i)
             {
                 array[j].bits   = u.bits;

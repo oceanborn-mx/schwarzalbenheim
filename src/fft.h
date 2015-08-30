@@ -30,10 +30,9 @@
 #define TWOPI       (2.0 * PI)
 #define NBITS       4               // WA: hard-coded value to number of bits
 #define NBITS_TW    (NBITS - 1)     // 
-//#define NBITS(X)    (log2(X))
 #define _DEBUG_
 
-constexpr int NN       = 16;           // Number of points of the FFT
+const int NN = 16;  // Number of points of the FFT
 //constexpr int aux = log2(NN);
 //const int nbits = 4;
 //constexpr log2
@@ -97,7 +96,7 @@ typedef struct COMPLEX_NUMBER
 } COMPLEX_NUMBER;
 
 // function to return the mask accordind to the number of bits
-void masks(int nbits)
+int masks(int nbits)
 {
     switch (nbits)
     {
@@ -158,4 +157,18 @@ void masks(int nbits)
             MASK1 = 0x0001;
             MASK2 = 0xFFFF;
     }   // end switch
+
+    return EXIT_SUCCESS;
 }
+
+// function to swap numbers
+inline int swap(double *a, double *b)
+{
+    double temp;    // temporary
+
+    temp = *a;
+    *a = *b;
+    *b = temp;
+
+    return EXIT_SUCCESS;
+}   // end swap
