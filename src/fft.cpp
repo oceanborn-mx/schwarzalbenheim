@@ -23,8 +23,6 @@
 //       * use c++ 14 initializers, constructors, etc.
 //       * your contribution is welcome
 
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include <iostream>
 #include <iomanip>
 #include "fft.h"
@@ -49,10 +47,12 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     BITS u, _au, _bu, _cu, _xu, _yu, _u;
     BITS v, _av, _bv, _cv, _xv, _yv, _v;
 
-    BITS uaux, vaux, array[16];
+    // array to hold the values nedeed to swap when
+    // butterfly operation are done
+    BITS array[NN];
 
-    BITS a, b, c, x, y, r;
-    BITS aa, bb, cc, xx, yy, s;
+    BITS _ar, _br, _cr, _xr, _yr, _r;
+    BITS _as, _bs, _cs, _xs, _ys, _s;
 
     // masks
     masks(NBITS);
@@ -95,50 +95,46 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
         
             // twiddle factor
             theta = (isign * TWOPI * _w.bits) / NN;     // angle
-            wr = cos(theta);    // real
-            wi = sin(theta);    // imaginary
+            wr = cos(theta);                            // real
+            wi = sin(theta);                            // imaginary
                                     
             // bit reversal algorithm
             u.bits = j;
             v.bits = j + 1;
 
-            // auxiliar counter for swapping
-            // initialize
+            // bit reversal algorithm to swap values 
+            // when butterfly operation are done
             if (0 == i)
             {
-                uaux.bits = u.bits;
-                vaux.bits = v.bits;
-                array[j].bits = u.bits;
-                array[j + 1].bits = v.bits;
+                array[j].bits   = u.bits;
+                array[j+1].bits = v.bits;
             }
             
             // hold the actual value
-            uaux.bits = uaux.bits;
-            vaux.bits = vaux.bits;
-            array[j].bits = array[j].bits;
-            array[j + 1].bits = array[j + 1].bits;
+            array[j].bits   = array[j].bits;
+            array[j+1].bits = array[j+1].bits;
 
-            a.bits = array[j].bits & MASK1;
-            b.bits = array[j].bits & (MASK2 >> i);
-            c.bits = array[j].bits & ((~MASK2) >> i);
-            x.bits = a.bits << (NSTAGES - 1 - i);
-            y.bits = b.bits >> 1;
+            _ar.bits = array[j].bits & MASK1;
+            _br.bits = array[j].bits & (MASK2 >> i);
+            _cr.bits = array[j].bits & ((~MASK2) >> i);
+            _xr.bits = _ar.bits << (NSTAGES - 1 - i);
+            _yr.bits = _br.bits >> 1;
 
-            aa.bits = array[j+1].bits & MASK1;
-            bb.bits = array[j+1].bits & (MASK2 >> i);
-            cc.bits = array[j+1].bits & ((~MASK2) >> i);
-            xx.bits = aa.bits << (NSTAGES - 1 - i);
-            yy.bits = bb.bits >> 1;
+            _as.bits = array[j+1].bits & MASK1;
+            _bs.bits = array[j+1].bits & (MASK2 >> i);
+            _cs.bits = array[j+1].bits & ((~MASK2) >> i);
+            _xs.bits = _as.bits << (NSTAGES - 1 - i);
+            _ys.bits = _bs.bits >> 1;
 
-            r.bits = x.bits | y.bits | c.bits;
-            s.bits = xx.bits | yy.bits | cc.bits;
+            _r.bits = _xr.bits | _yr.bits | _cr.bits;
+            _s.bits = _xs.bits | _ys.bits | _cs.bits;
 
-            array[j].bits = r.bits;
-            array[j+1].bits = s.bits;
+            array[j].bits   = _r.bits;
+            array[j+1].bits = _s.bits;
 
             // this first approach was intended to do what is actually
             // perform in the code above (see the README file), but, 
-            // it actually doing what the butterfly architecture
+            // is actually doing what the butterfly architecture
             // is intended to be, this initial bug is in fact a feature,
             // is a kind of penicillin :)
             _au.bits = u.bits & MASK1;
@@ -203,7 +199,7 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     }   // end for
 
     // swapping
-    int q = 0;  // counter variable for the below loops
+    int q = 0;  // counter variable for below loops
 
     for (q = 1; q < (NN / 4); ++q)
     {
