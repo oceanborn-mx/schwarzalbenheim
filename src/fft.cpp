@@ -34,73 +34,6 @@ unsigned int MASK2;
 
 int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
 
-
-// function to return the mask accordind to the number of bits
-int masks(int nbits)
-{
-    switch (nbits)
-    {
-        case 4:
-            MASK1 = 0x1;
-            MASK2 = 0xF;
-            break;
-        case 5:
-            MASK1 = 0x01;
-            MASK2 = 0x1F;
-            break;
-        case 6:
-            MASK1 = 0x01;
-            MASK2 = 0x3F;
-            break;
-        case 7:
-            MASK1 = 0x01;
-            MASK2 = 0x7F;
-            break;
-        case 8:
-            MASK1 = 0x01;
-            MASK2 = 0xFF;
-            break;
-        case 9:
-            MASK1 = 0x001;
-            MASK2 = 0x1FF;
-            break;
-        case 10:
-            MASK1 = 0x001;
-            MASK2 = 0x3FF;
-            break;
-        case 11:
-            MASK1 = 0x001;
-            MASK2 = 0x7FF;
-            break;
-        case 12:
-            MASK1 = 0x001;
-            MASK2 = 0xFFF;
-            break;
-        case 13:
-            MASK1 = 0x0001;
-            MASK2 = 0x1FFF;
-            break;
-        case 14:
-            MASK1 = 0x0001;
-            MASK2 = 0x3FFF;
-            break;
-        case 15:
-            MASK1 = 0x0001;
-            MASK2 = 0x7FFF;
-            break;
-        case 16:
-            MASK1 = 0x0001;
-            MASK2 = 0xFFFF;
-            break;
-        default:
-            // TODO: find a restriction
-            MASK1 = 0x0001;
-            MASK2 = 0xFFFF;
-    }   // end switch
-
-    return EXIT_SUCCESS;
-}
-
 void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 {
     // variables to perform the bit reversal algorithm
@@ -291,6 +224,72 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
 
 }   // end fourier
 
+// function to return the mask accordind to the number of bits
+int masks(int nbits)
+{
+    switch (nbits)
+    {
+        case 4:
+            MASK1 = 0x1;
+            MASK2 = 0xF;
+            break;
+        case 5:
+            MASK1 = 0x01;
+            MASK2 = 0x1F;
+            break;
+        case 6:
+            MASK1 = 0x01;
+            MASK2 = 0x3F;
+            break;
+        case 7:
+            MASK1 = 0x01;
+            MASK2 = 0x7F;
+            break;
+        case 8:
+            MASK1 = 0x01;
+            MASK2 = 0xFF;
+            break;
+        case 9:
+            MASK1 = 0x001;
+            MASK2 = 0x1FF;
+            break;
+        case 10:
+            MASK1 = 0x001;
+            MASK2 = 0x3FF;
+            break;
+        case 11:
+            MASK1 = 0x001;
+            MASK2 = 0x7FF;
+            break;
+        case 12:
+            MASK1 = 0x001;
+            MASK2 = 0xFFF;
+            break;
+        case 13:
+            MASK1 = 0x0001;
+            MASK2 = 0x1FFF;
+            break;
+        case 14:
+            MASK1 = 0x0001;
+            MASK2 = 0x3FFF;
+            break;
+        case 15:
+            MASK1 = 0x0001;
+            MASK2 = 0x7FFF;
+            break;
+        case 16:
+            MASK1 = 0x0001;
+            MASK2 = 0xFFFF;
+            break;
+        default:
+            // TODO: find a restriction
+            MASK1 = 0x0001;
+            MASK2 = 0xFFFF;
+    }   // end switch
+
+    return EXIT_SUCCESS;
+}   // end masks
+
 // function to swap numbers
 inline int swap(double *a, double *b)
 {
@@ -302,5 +301,3 @@ inline int swap(double *a, double *b)
 
     return EXIT_SUCCESS;
 }   // end swap
-
-

@@ -34,36 +34,6 @@
 #define _DEBUG_
 
 const int NN = 16;  // Number of points of the FFT
-//constexpr int aux = log2(NN);
-//const int nbits = 4;
-//constexpr log2
-//static constexpr int nbits_n = static_cast<int>(log2(NN));
-//static constexpr int nbits = nbits_n;
-//constexpr int NBITS    =   nbits;   // Number of bits to fit the number of FFT points
-//constexpr int mylog2(int base)
-//{
-//    int aux = static_cast<int>(log2(base));
-//    return aux;
-//}
-//const int aux = static_cast<int>(log2(NN));
-//enum nbits
-//{
-//    NBITS = aux
-//};
-
-//constexpr int NBITS = noexcept(mylog2(NN));
-//constexpr void set_constants()
-//{
-//    int NBITS = log2(NN);
-//}   // end set_constants
-
-
-
-// needed to eliminate the hard-code value
-//enum bits
-//{
-//    NBITS = static_cast<int>(log2(NN))
-//};
 
 // struct to hold the number of bits needed 
 // to fit the number of FFT points
@@ -94,83 +64,11 @@ typedef struct COMPLEX_NUMBER
     };
 } COMPLEX_NUMBER;
 
+// prototypes
+
 // function to return the mask accordind to the number of bits
 int masks(int nbits);
-//{
-//    switch (nbits)
-//    {
-//        case 4:
-//            MASK1 = 0x1;
-//            MASK2 = 0xF;
-//            break;
-//        case 5:
-//            MASK1 = 0x01;
-//            MASK2 = 0x1F;
-//            break;
-//        case 6:
-//            MASK1 = 0x01;
-//            MASK2 = 0x3F;
-//            break;
-//        case 7:
-//            MASK1 = 0x01;
-//            MASK2 = 0x7F;
-//            break;
-//        case 8:
-//            MASK1 = 0x01;
-//            MASK2 = 0xFF;
-//            break;
-//        case 9:
-//            MASK1 = 0x001;
-//            MASK2 = 0x1FF;
-//            break;
-//        case 10:
-//            MASK1 = 0x001;
-//            MASK2 = 0x3FF;
-//            break;
-//        case 11:
-//            MASK1 = 0x001;
-//            MASK2 = 0x7FF;
-//            break;
-//        case 12:
-//            MASK1 = 0x001;
-//            MASK2 = 0xFFF;
-//            break;
-//        case 13:
-//            MASK1 = 0x0001;
-//            MASK2 = 0x1FFF;
-//            break;
-//        case 14:
-//            MASK1 = 0x0001;
-//            MASK2 = 0x3FFF;
-//            break;
-//        case 15:
-//            MASK1 = 0x0001;
-//            MASK2 = 0x7FFF;
-//            break;
-//        case 16:
-//            MASK1 = 0x0001;
-//            MASK2 = 0xFFFF;
-//            break;
-//        default:
-//            // TODO: find a restriction
-//            MASK1 = 0x0001;
-//            MASK2 = 0xFFFF;
-//    }   // end switch
-//
-//    return EXIT_SUCCESS;
-//}
-
 // function to swap numbers
 inline int swap(double *a, double *b);
-//{
-//    double temp;    // temporary
-//
-//    temp = *a;
-//    *a = *b;
-//    *b = temp;
-//
-//    return EXIT_SUCCESS;
-//}   // end swap
-
-// prototypes
+// fast fourier transform
 void fourier(COMPLEX_NUMBER data[], int nn, int isign);
