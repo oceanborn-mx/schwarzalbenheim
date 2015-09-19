@@ -20,6 +20,7 @@
 // TODO: * clean-up the code.
 //       * make generic abount the number of FFT points, always in power of 2
 //       * remove the hard-coded values.
+//       * use templates
 //       * use c++ 14 initializers, constructors, etc.
 //       * your contribution is welcome
 
@@ -44,12 +45,11 @@ const int NN = 16;  // Number of points of the FFT
 //    int aux = static_cast<int>(log2(base));
 //    return aux;
 //}
-const int aux = static_cast<int>(log2(NN));
+//const int aux = static_cast<int>(log2(NN));
 //enum nbits
 //{
 //    NBITS = aux
 //};
-int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
 
 //constexpr int NBITS = noexcept(mylog2(NN));
 //constexpr void set_constants()
@@ -57,8 +57,7 @@ int NSTAGES  = log2(NN);     // Number of stages to complete the FFT
 //    int NBITS = log2(NN);
 //}   // end set_constants
 
-unsigned int MASK1;
-unsigned int MASK2;
+
 
 // needed to eliminate the hard-code value
 //enum bits
@@ -96,79 +95,82 @@ typedef struct COMPLEX_NUMBER
 } COMPLEX_NUMBER;
 
 // function to return the mask accordind to the number of bits
-int masks(int nbits)
-{
-    switch (nbits)
-    {
-        case 4:
-            MASK1 = 0x1;
-            MASK2 = 0xF;
-            break;
-        case 5:
-            MASK1 = 0x01;
-            MASK2 = 0x1F;
-            break;
-        case 6:
-            MASK1 = 0x01;
-            MASK2 = 0x3F;
-            break;
-        case 7:
-            MASK1 = 0x01;
-            MASK2 = 0x7F;
-            break;
-        case 8:
-            MASK1 = 0x01;
-            MASK2 = 0xFF;
-            break;
-        case 9:
-            MASK1 = 0x001;
-            MASK2 = 0x1FF;
-            break;
-        case 10:
-            MASK1 = 0x001;
-            MASK2 = 0x3FF;
-            break;
-        case 11:
-            MASK1 = 0x001;
-            MASK2 = 0x7FF;
-            break;
-        case 12:
-            MASK1 = 0x001;
-            MASK2 = 0xFFF;
-            break;
-        case 13:
-            MASK1 = 0x0001;
-            MASK2 = 0x1FFF;
-            break;
-        case 14:
-            MASK1 = 0x0001;
-            MASK2 = 0x3FFF;
-            break;
-        case 15:
-            MASK1 = 0x0001;
-            MASK2 = 0x7FFF;
-            break;
-        case 16:
-            MASK1 = 0x0001;
-            MASK2 = 0xFFFF;
-            break;
-        default:
-            // TODO: find a restriction
-            MASK1 = 0x0001;
-            MASK2 = 0xFFFF;
-    }   // end switch
-
-    return EXIT_SUCCESS;
-}
+int masks(int nbits);
+//{
+//    switch (nbits)
+//    {
+//        case 4:
+//            MASK1 = 0x1;
+//            MASK2 = 0xF;
+//            break;
+//        case 5:
+//            MASK1 = 0x01;
+//            MASK2 = 0x1F;
+//            break;
+//        case 6:
+//            MASK1 = 0x01;
+//            MASK2 = 0x3F;
+//            break;
+//        case 7:
+//            MASK1 = 0x01;
+//            MASK2 = 0x7F;
+//            break;
+//        case 8:
+//            MASK1 = 0x01;
+//            MASK2 = 0xFF;
+//            break;
+//        case 9:
+//            MASK1 = 0x001;
+//            MASK2 = 0x1FF;
+//            break;
+//        case 10:
+//            MASK1 = 0x001;
+//            MASK2 = 0x3FF;
+//            break;
+//        case 11:
+//            MASK1 = 0x001;
+//            MASK2 = 0x7FF;
+//            break;
+//        case 12:
+//            MASK1 = 0x001;
+//            MASK2 = 0xFFF;
+//            break;
+//        case 13:
+//            MASK1 = 0x0001;
+//            MASK2 = 0x1FFF;
+//            break;
+//        case 14:
+//            MASK1 = 0x0001;
+//            MASK2 = 0x3FFF;
+//            break;
+//        case 15:
+//            MASK1 = 0x0001;
+//            MASK2 = 0x7FFF;
+//            break;
+//        case 16:
+//            MASK1 = 0x0001;
+//            MASK2 = 0xFFFF;
+//            break;
+//        default:
+//            // TODO: find a restriction
+//            MASK1 = 0x0001;
+//            MASK2 = 0xFFFF;
+//    }   // end switch
+//
+//    return EXIT_SUCCESS;
+//}
 
 // function to swap numbers
-inline int swap(double *a, double *b)
-{
-    double temp;    // temporary
+inline int swap(double *a, double *b);
+//{
+//    double temp;    // temporary
+//
+//    temp = *a;
+//    *a = *b;
+//    *b = temp;
+//
+//    return EXIT_SUCCESS;
+//}   // end swap
 
-    temp = *a;
-    *a = *b;
-    *b = temp;
-
-    return EXIT_SUCCESS;
-}   // end swap
+// prototypes
+void fourier(COMPLEX_NUMBER data[], int nn, int isign);
