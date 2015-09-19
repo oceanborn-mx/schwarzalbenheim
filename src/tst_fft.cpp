@@ -77,7 +77,7 @@ int main()
     //arreglo[15].im = 0.0;
 
     // calculate FFT
-	fourier(arreglo, NN, 1);
+    fourier(arreglo, NN, 1);
 
     //arreglo[0].re = 45.0;
     //arreglo[0].im = 0.0;
@@ -113,7 +113,7 @@ int main()
     //arreglo[15].im = -16.6652;
 
     //// calculate IFFT
-	fourier(arreglo, NN, -1);
+    fourier(arreglo, NN, -1);
     //// need to normalize
     
     // release allcated memory
