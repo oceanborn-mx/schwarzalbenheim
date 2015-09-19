@@ -34,8 +34,8 @@ int main()
 
     COMPLEX_NUMBER *arreglo; //[NN];
 
-    /* allocate memory for NFFT complex numbers (note the +1) */
-	arreglo = (COMPLEX_NUMBER *) malloc((NN) * sizeof(COMPLEX_NUMBER));
+    // allocate memory for FFT complex numbers
+    arreglo = (COMPLEX_NUMBER *) malloc((NN) * sizeof(COMPLEX_NUMBER));
 
     for (int i = 0; i < NN; ++i)
     {
@@ -114,7 +114,13 @@ int main()
 
     //// calculate IFFT
 	fourier(arreglo, NN, -1);
-    //// need to normalize    
+    //// need to normalize
+    
+    // release allcated memory
+    free(arreglo);
+
+    // avoid reuse
+    arreglo = NULL;
 
     return 0;
 }   // end main
