@@ -32,7 +32,10 @@ int main()
 {
     //masks(4);
 
-    COMPLEX_NUMBER arreglo[NN];
+    COMPLEX_NUMBER *arreglo; //[NN];
+
+    /* allocate memory for NFFT complex numbers (note the +1) */
+	arreglo = (COMPLEX_NUMBER *) malloc((NN) * sizeof(COMPLEX_NUMBER));
 
     for (int i = 0; i < NN; ++i)
     {
@@ -110,7 +113,7 @@ int main()
     //arreglo[15].im = -16.6652;
 
     //// calculate IFFT
-	//fourier(arreglo, NN, -1);
+	fourier(arreglo, NN, -1);
     //// need to normalize    
 
     return 0;
