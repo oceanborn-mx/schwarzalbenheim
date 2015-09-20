@@ -19,6 +19,7 @@
 
 // TODO: * clean-up the code.
 //       * make generic abount the number of FFT points, always in power of 2
+//       * make generic the swapping loops
 //       * remove the hard-coded values.
 //       * use c++ 14 initializers, constructors, etc.
 //       * your contribution is welcome
@@ -192,19 +193,37 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     // swapping
     int q = 0;  // counter variable for below loops
 
-    for (q = 1; q < (NN / 4); ++q)
+    for (q = 1; q < (NN / 8); ++q)
     {
         swap(&data[array[q].bits].re, &data[q].re);
         swap(&data[array[q].bits].im, &data[q].im);
     }
 
-    for (q = NN / 4 + 1; q < (NN / 2); ++q)
+    for (q = NN / 8 + 1; q < (NN / 4); ++q)
     {
         swap(&data[array[q].bits].re, &data[q].re);
         swap(&data[array[q].bits].im, &data[q].im);
     }
 
-    for (q = NN / 2 + NN / 4 - 1; q < (NN * 3 / 4); ++q)
+    for (q = NN / 4 + 1; q < (NN / 4 + NN / 8); ++q)    // 3 / 8
+    {
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
+    }
+
+    for (q = NN / 4 + NN / 8 + 1; q < (NN / 2); ++q)
+    {
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
+    }
+
+    for (q = NN / 2 + NN / 8 - 1; q < (NN / 2 + NN / 8); ++q)   // 5 / 8
+    {
+        swap(&data[array[q].bits].re, &data[q].re);
+        swap(&data[array[q].bits].im, &data[q].im);
+    }
+
+    for (q = NN / 2 + NN / 4 - 1; q < (NN / 2 + NN / 4); ++q)   // 6 / 8 = 3 / 4
     {
         swap(&data[array[q].bits].re, &data[q].re);
         swap(&data[array[q].bits].im, &data[q].im);
