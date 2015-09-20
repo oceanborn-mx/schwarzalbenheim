@@ -191,44 +191,31 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     }   // end for
 
     // swapping
+    int h = 0;
     int q = 0;  // counter variable for below loops
 
-    for (q = 1; q < (NN / 8); ++q)
+    // first half
+    for (h = 0; h < (NN / 8); ++h)
     {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
+        for (q = h * NN / (NN / 4) + 1; q < (1 + h) * NN / (NN / 4); ++q)
+        {
+            swap(&data[array[q].bits].re, &data[q].re);
+            swap(&data[array[q].bits].im, &data[q].im);
+        }
     }
 
-    for (q = NN / 8 + 1; q < (NN / 4); ++q)
+    // second half
+    for (h = 0; h < (NN / 8) / 2; ++h)
     {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
+        for (q = NN / 2 + (1 + h) * NN / (NN / 4) - 1; q < NN / 2 + (1 + h) * NN / (NN / 4); ++q)
+        {
+            swap(&data[array[q].bits].re, &data[q].re);
+            swap(&data[array[q].bits].im, &data[q].im);
+        }
     }
 
-    for (q = NN / 4 + 1; q < (NN / 4 + NN / 8); ++q)    // 3 / 8
-    {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
-    }
 
-    for (q = NN / 4 + NN / 8 + 1; q < (NN / 2); ++q)
-    {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
-    }
-
-    for (q = NN / 2 + NN / 8 - 1; q < (NN / 2 + NN / 8); ++q)   // 5 / 8
-    {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
-    }
-
-    for (q = NN / 2 + NN / 4 - 1; q < (NN / 2 + NN / 4); ++q)   // 6 / 8 = 3 / 4
-    {
-        swap(&data[array[q].bits].re, &data[q].re);
-        swap(&data[array[q].bits].im, &data[q].im);
-    }
-
+    
 #ifdef _DEBUG_ 
     // print out the FFT
     for (int qq = 0; qq < NN; ++qq)
