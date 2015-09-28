@@ -45,6 +45,8 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     // butterfly operation are done
     BITS array[NN];
 
+    COMPLEX_NUMBER array_swap[NN];
+
     BITS _ar, _br, _cr, _xr, _yr, _r;
     BITS _as, _bs, _cs, _xs, _ys, _s;
 
@@ -191,30 +193,40 @@ void fourier(COMPLEX_NUMBER data[], int nn, int isign)
     }   // end for
 
     // swapping
+    // counter variables for below loops
     int h = 0;
-    int q = 0;  // counter variable for below loops
+    int q = 0;
 
     // first half
-    for (h = 0; h < (NN / 8); ++h)
+    //for (h = 0; h < (NN / 8); ++h)
+    //{
+    //    for (q = h * NN / (NN / 4) + 1; q < (1 + h) * NN / (NN / 4); ++q)
+    //    {
+    //        swap(&data[array[q].bits].re, &data[q].re);
+    //        swap(&data[array[q].bits].im, &data[q].im);
+    //    }
+    //}
+
+    //// second half
+    //for (h = 0; h < (NN / 8) / 2; ++h)
+    //{
+    //    for (q = NN / 2 + (1 + h) * NN / (NN / 4) - 1; q < NN / 2 + (1 + h) * NN / (NN / 4); ++q)
+    //    {
+    //        swap(&data[array[q].bits].re, &data[q].re);
+    //        swap(&data[array[q].bits].im, &data[q].im);
+    //    }
+    //}
+
+    // WA - no optimum
+    for (h = 0; h < NN; ++h)
     {
-        for (q = h * NN / (NN / 4) + 1; q < (1 + h) * NN / (NN / 4); ++q)
-        {
-            swap(&data[array[q].bits].re, &data[q].re);
-            swap(&data[array[q].bits].im, &data[q].im);
-        }
+        array_swap[h] = data[array[h].bits];
     }
-
-    // second half
-    for (h = 0; h < (NN / 8) / 2; ++h)
+    
+    for (q = 0; q < NN; ++q)
     {
-        for (q = NN / 2 + (1 + h) * NN / (NN / 4) - 1; q < NN / 2 + (1 + h) * NN / (NN / 4); ++q)
-        {
-            swap(&data[array[q].bits].re, &data[q].re);
-            swap(&data[array[q].bits].im, &data[q].im);
-        }
+        data[q] = array_swap[q];
     }
-
-
     
 #ifdef _DEBUG_ 
     // print out the FFT

@@ -30,11 +30,11 @@
 #define _USE_MATH_DEFINES
 #define PI          M_PI            // pi to machine precision, defined in math.h
 #define TWOPI       (2.0 * PI)
-#define NBITS       5               // WA: hard-coded value to number of bits
+#define NBITS       10               // WA: hard-coded value to number of bits
 #define NBITS_TW    (NBITS - 1)     // 
 #define _DEBUG_
 
-const int NN = 32;  // Number of points of the FFT
+const int NN = 1024;  // Number of points of the FFT
 
 // struct to hold the number of bits needed 
 // to fit the number of FFT points
